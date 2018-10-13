@@ -3,7 +3,7 @@ Simple project to create a 'fake' Apple Watch watch face using Sprite Kit.
 
 This repo is based on @steventroughtonsmith 's great work (https://github.com/steventroughtonsmith/SpriteKitWatchFace)
 
-For simplicity, I've removed other watch faces, they are still available in original repo
+For code simplicity, I've removed other watch faces, they are still available in original repo
 
 # Screenshot
 
