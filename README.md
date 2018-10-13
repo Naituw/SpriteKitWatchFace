@@ -9,7 +9,7 @@ For code simplicity, I've removed other watch faces, they are still available in
 
 (Use digital crown to switch between fullscreen and round mode)
 
-![screenshot](http://wx4.sinaimg.cn/large/69c30c5fly1fw6lrav7ylj20kg0cggta.jpg)
+![screenshot](http://wx3.sinaimg.cn/large/69c30c5fly1fw6p4ax3qaj214w0cgqcu.jpg)
 
 (For simplicity, I've removed following watch faces, you can get them from [original repo](https://github.com/steventroughtonsmith/SpriteKitWatchFace))
 
