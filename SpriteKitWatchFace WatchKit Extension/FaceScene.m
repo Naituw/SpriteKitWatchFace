@@ -75,6 +75,19 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
 }
 @end
 
+@interface FaceScene ()
+
+@property SKTexture * backgroundTexture;
+@property SKTexture * hoursHandTexture;
+@property SKTexture * minutesHandTexture;
+@property SKTexture * secondsHandTexture;
+@property CGFloat hoursAnchorFromBottom;
+@property CGFloat minutesAnchorFromBottom;
+@property CGFloat secondsAnchorFromBottom;
+@property BOOL runsBackwards;
+
+@end
+
 @implementation FaceScene
 
 - (instancetype)initWithCoder:(NSCoder *)coder
@@ -86,7 +99,7 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
 
 		self.theme = [[NSUserDefaults standardUserDefaults] integerForKey:@"Theme"];
         if (self.theme >= ThemeMAX) {
-            self.theme = ThemeOriginalRound;
+            self.theme = 0;
         }
 		self.useProgrammaticLayout = NO;
 		self.useRoundFace = YES;
@@ -335,17 +348,67 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
     alternateMinorMarkColor = [colorRegionColor colorWithAlphaComponent:0.5];
     alternateMajorMarkColor = [SKColor colorWithWhite:1 alpha:0.8];
 
+    NSString * backgroundImageName = nil;
+    NSString * hourHandImageName = nil;
+    NSString * minuteHandImageName = nil;
+    NSString * secondHandImageName = nil;
+    CGFloat hoursAnchorFromBottom   = 0;
+    CGFloat minutesAnchorFromBottom = 0;
+    CGFloat secondsAnchorFromBottom = 0;
+    BOOL runBackwards = NO;
+    
 	switch (self.theme) {
         case ThemeOriginalFullScreen:
-            self.backgroundTexture = [SKTexture textureWithImageNamed:@"original_face_fullscreen"];
+            backgroundImageName = @"original_face_fullscreen";
+            hourHandImageName = @"original_hours";
+            minuteHandImageName = @"original_minutes";
+            secondHandImageName = @"original_seconds";
+            hoursAnchorFromBottom = 17;
+            minutesAnchorFromBottom = 17;
+            secondsAnchorFromBottom = 26;
             break;
         case ThemeOriginalRound:
-            self.backgroundTexture = [SKTexture textureWithImageNamed:@"original_face"];
+            backgroundImageName = @"original_face";
+            hourHandImageName = @"original_hours";
+            minuteHandImageName = @"original_minutes";
+            secondHandImageName = @"original_seconds";
+            hoursAnchorFromBottom = 17;
+            minutesAnchorFromBottom = 17;
+            secondsAnchorFromBottom = 26;
+            break;
+        case ThemeThinkDifferentBlack:
+            backgroundImageName = @"thinkdiff_black_bg";
+            hourHandImageName = @"thinkdiff_black_hours";
+            minuteHandImageName = @"thinkdiff_black_minutes";
+            secondHandImageName = @"thinkdiff_black_seconds";
+            hoursAnchorFromBottom = 16;
+            minutesAnchorFromBottom = 12;
+            secondsAnchorFromBottom = 36;
+            runBackwards = YES;
+            break;
+        case ThemeThinkDifferentWhite:
+            backgroundImageName = @"thinkdiff_white_bg";
+            hourHandImageName = @"thinkdiff_white_hours";
+            minuteHandImageName = @"thinkdiff_white_minutes";
+            secondHandImageName = @"thinkdiff_white_seconds";
+            hoursAnchorFromBottom = 16;
+            minutesAnchorFromBottom = 12;
+            secondsAnchorFromBottom = 36;
+            runBackwards = YES;
             break;
 		default:
 			break;
 	}
-	
+    
+    self.backgroundTexture = [SKTexture textureWithImageNamed:backgroundImageName];
+    self.hoursHandTexture = [SKTexture textureWithImageNamed:hourHandImageName];
+    self.minutesHandTexture = [SKTexture textureWithImageNamed:minuteHandImageName];
+    self.secondsHandTexture = [SKTexture textureWithImageNamed:secondHandImageName];
+    self.hoursAnchorFromBottom = hoursAnchorFromBottom;
+    self.minutesAnchorFromBottom = minutesAnchorFromBottom;
+    self.secondsAnchorFromBottom = secondsAnchorFromBottom;
+    self.runsBackwards = runBackwards;
+    
 	self.colorRegionColor = colorRegionColor;
 	self.faceBackgroundColor = faceBackgroundColor;
 	self.majorMarkColor = majorMarkColor;
@@ -377,12 +440,21 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
 	
 	hourHand.color = self.handColor;
 	hourHand.colorBlendFactor = 1.0;
+    hourHand.texture = self.hoursHandTexture;
+    hourHand.size = hourHand.texture.size;
+    hourHand.anchorPoint = CGPointMake(0.5, _hoursAnchorFromBottom / hourHand.size.height);
 	
 	minuteHand.color = self.handColor;
 	minuteHand.colorBlendFactor = 1.0;
+    minuteHand.texture = self.minutesHandTexture;
+    minuteHand.size = minuteHand.texture.size;
+    minuteHand.anchorPoint = CGPointMake(0.5, _minutesAnchorFromBottom / minuteHand.size.height);
 	
 	secondHand.color = self.secondHandColor;
 	secondHand.colorBlendFactor = 1.0;
+    secondHand.texture = self.secondsHandTexture;
+    secondHand.size = secondHand.texture.size;
+    secondHand.anchorPoint = CGPointMake(0.5, _secondsAnchorFromBottom / secondHand.size.height);
 	
 	self.backgroundColor = self.faceBackgroundColor;
 	
@@ -392,7 +464,7 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
 	numbers.color = self.textColor;
 	numbers.colorBlendFactor = 1.0;
     numbers.texture = self.backgroundTexture;
-    numbers.size = self.backgroundTexture.size;
+    numbers.size = numbers.texture.size;
 	
 	hourHandInlay.color = self.inlayColor;
 	hourHandInlay.colorBlendFactor = 1.0;
@@ -482,6 +554,12 @@ CGFloat workingRadiusForFaceOfSizeWithAngle(CGSize faceSize, CGFloat angle)
 	hourHand.zRotation =  - (2*M_PI)/12.0 * (CGFloat)(components.hour%12 + 1.0/60.0*components.minute);
 	minuteHand.zRotation =  - (2*M_PI)/60.0 * (CGFloat)(components.minute + 1.0/60.0*components.second);
 	secondHand.zRotation = - (2*M_PI)/60 * (CGFloat)(components.second + 1.0/NSEC_PER_SEC*components.nanosecond);
+    
+    if (self.runsBackwards) {
+        hourHand.zRotation = -hourHand.zRotation;
+        minuteHand.zRotation = -minuteHand.zRotation;
+        secondHand.zRotation = -secondHand.zRotation;
+    }
 	
 	colorRegion.zRotation =  M_PI_2 -(2*M_PI)/60.0 * (CGFloat)(components.minute + 1.0/60.0*components.second);
 	colorRegionReflection.zRotation =  M_PI_2 - (2*M_PI)/60.0 * (CGFloat)(components.minute + 1.0/60.0*components.second);

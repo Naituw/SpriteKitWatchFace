@@ -11,7 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-	ThemeOriginalRound = 0,
+    ThemeThinkDifferentBlack,
+    ThemeThinkDifferentWhite,
+    
+    ThemeOriginalRound,
     ThemeOriginalFullScreen,
     
     ThemeMAX,
@@ -51,7 +54,6 @@ typedef enum : NSUInteger {
 @property SKColor *alternateMajorMarkColor;
 @property SKColor *alternateMinorMarkColor;
 @property SKColor *alternateTextColor;
-@property SKTexture * backgroundTexture;
 
 @property BOOL useProgrammaticLayout;
 @property BOOL useRoundFace;

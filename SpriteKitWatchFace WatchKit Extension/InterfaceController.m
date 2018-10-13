@@ -28,7 +28,7 @@
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
 	
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{@"Theme":@(ThemeOriginalRound)}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{@"Theme":@(0)}];
 
 	FaceScene *scene = [FaceScene nodeWithFileNamed:@"FaceScene"];
 	
