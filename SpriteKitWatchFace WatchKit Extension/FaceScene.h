@@ -11,31 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef enum : NSUInteger {
-	ThemeHermesPink,
-	ThemeHermesOrange,
-	ThemeNavy,
-	ThemeTidepod,
-	ThemeBretonnia,
-	ThemeNoir,
-	ThemeContrast,
-	ThemeVictoire,
-	ThemeLiquid,
-	ThemeAngler,
-	ThemeSculley,
-	ThemeKitty,
-	ThemeDelay,
-	ThemeDiesel,
-	ThemeLuxe,
-	ThemeSage,
-	ThemeBondi,
-	ThemeTangerine,
-	ThemeStrawberry,
-	ThemePawn,
-	ThemeRoyal,
-	ThemeMarques,
-	ThemeVox,
-	ThemeSummer,
-	ThemeMAX
+	ThemeOriginalRound = 0,
+    ThemeOriginalFullScreen,
+    
+    ThemeMAX,
 } Theme;
 
 typedef enum : NSUInteger {
@@ -72,6 +51,7 @@ typedef enum : NSUInteger {
 @property SKColor *alternateMajorMarkColor;
 @property SKColor *alternateMinorMarkColor;
 @property SKColor *alternateTextColor;
+@property SKTexture * backgroundTexture;
 
 @property BOOL useProgrammaticLayout;
 @property BOOL useRoundFace;

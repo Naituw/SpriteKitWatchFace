@@ -28,7 +28,7 @@
 - (void)awakeWithContext:(id)context {
     [super awakeWithContext:context];
 	
-	[[NSUserDefaults standardUserDefaults] registerDefaults:@{@"Theme":@(ThemeMarques)}];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:@{@"Theme":@(ThemeOriginalRound)}];
 
 	FaceScene *scene = [FaceScene nodeWithFileNamed:@"FaceScene"];
 	
@@ -38,7 +38,7 @@
 	scene.camera.xScale = (184.0/currentDeviceSize.width);
 	scene.camera.yScale = (184.0/currentDeviceSize.width);
 	
-	[self.scene presentScene:scene];
+	[self.scene presentScene:scene];    
 }
 
 - (void)didAppear
